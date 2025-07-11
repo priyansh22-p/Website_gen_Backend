@@ -20,6 +20,17 @@ const app = express();
 const PORT = 5000;
 
 app.use(cors());
+// Manually set CORS headers (important for Render and complex POST requests)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Or "http://localhost:3000" for tighter security
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  next();
+});
+
+// Handle preflight (OPTIONS) requests
+app.options('*', cors());
+
 app.use(bodyParser.json());
 
 // Gemini API setup
