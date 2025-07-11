@@ -128,10 +128,12 @@ app.post("/generate", async (req, res) => {
 });
 
 // Serve static files for live preview (HTML, CSS, JS)
-app.use("/preview/:id", (req, res, next) => {
-  const dirPath = path.join(__dirname, "projects", req.params.id);
-  express.static(dirPath)(req, res, next);
+app.get("/preview/:id/:file", (req, res) => {
+  const { id, file } = req.params;
+  const filePath = path.join(__dirname, "projects", id, file);
+  res.sendFile(filePath);
 });
+
 
 // Ensure index.html is served on preview URL
 app.get("/preview/:id", (req, res) => {
