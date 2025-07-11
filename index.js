@@ -127,13 +127,11 @@ app.post("/generate", async (req, res) => {
   res.json({ id, code });
 });
 
-// Serve static files for live preview (HTML, CSS, JS)
-app.get("/preview/:id/:file", (req, res) => {
-  const { id, file } = req.params;
-  const filePath = path.join(__dirname, "projects", id, file);
-  res.sendFile(filePath);
+// Dynamically serve static assets (CSS, JS, images, etc.)
+app.use("/preview/:id", (req, res, next) => {
+  const staticPath = path.join(__dirname, "projects", req.params.id);
+  express.static(staticPath)(req, res, next);
 });
-
 
 // Ensure index.html is served on preview URL
 app.get("/preview/:id", (req, res) => {
